@@ -1,6 +1,6 @@
 # 1. 打开
 file_read = open("README")
-file_write = open("REAMDE[复件]", "w")
+file_write = open("REAMDE[复件1]", "w")
 
 # 2. 读、写
 text = file_read.read()

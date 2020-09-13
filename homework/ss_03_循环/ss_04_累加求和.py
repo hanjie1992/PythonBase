@@ -10,8 +10,7 @@ while i <= 100:
     print(i)
 
     # 每一次循环，都让 result 这个变量和 i 这个计数器相加
-    # result += i
-    result = result + i
+    result += i
 
     # 处理计数器
     i += 1

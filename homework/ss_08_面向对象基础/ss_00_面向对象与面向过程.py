@@ -36,7 +36,8 @@ class GuoBill():
         else:
             price = number * unit
         return price
-
+g = GuoBill()
+print(g.getPrice(12,2,"七夕节"))
 # 阿对决定让新的收银方式继承 Bill 类，先在 Bill 类中新增 discount 方法
 # 普通的收费方式在 discount,​函数中直接返回价格,七夕节的收费方式则继承此类,
 # 在 discount 函数中实现打 77折

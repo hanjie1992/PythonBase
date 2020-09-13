@@ -8,7 +8,8 @@ class Person:
 
     def __str__(self):
 
-        return "我的名字叫 {0} 体重是 {1} 公斤".format(self.name, self.weight)
+        return "我的名字叫 {0} 体重是 {1:.2f} 公斤".format(self.name, self.weight)
+
 
     def run(self):
         print("{0} 爱跑步，跑步锻炼身体".format(self.name))

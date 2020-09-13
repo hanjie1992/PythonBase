@@ -1,15 +1,15 @@
-import random
 import pygame
-
-# 屏幕大小的常量
+import random
+import sys
+import os
+curPath = os.path.abspath(os.path.dirname(__file__))
+rootPath = os.path.split(curPath)[0]
+sys.path.append(rootPath)
+# 游戏屏幕大小
 SCREEN_RECT = pygame.Rect(0, 0, 480, 700)
-# 刷新的帧率
-FRAME_PER_SEC = 60
-# 创建敌机的定时器常量
+# 敌机的定时器事件常量
 CREATE_ENEMY_EVENT = pygame.USEREVENT
-# 英雄发射子弹事件
 HERO_FIRE_EVENT = pygame.USEREVENT + 1
-
 
 class GameSprite(pygame.sprite.Sprite):
     """飞机大战游戏精灵"""
@@ -53,70 +53,54 @@ class Background(GameSprite):
         if self.rect.y >= SCREEN_RECT.height:
             self.rect.y = -self.rect.height
 
-
 class Enemy(GameSprite):
     """敌机精灵"""
 
     def __init__(self):
-
-        # 1. 调用父类方法，创建敌机精灵，同时指定敌机图片
+        # 1. 调用父类方法，创建敌机精灵，并且指定敌机的图像
         super().__init__("./images/enemy1.png")
 
-        # 2. 指定敌机的初始随机速度 1 ~ 3
+        # 2. 设置敌机的随机初始速度
         self.speed = random.randint(1, 3)
-
-        # 3. 指定敌机的初始随机位置
+        # 3. 设置敌机的随机初始位置
         self.rect.bottom = 0
-
         max_x = SCREEN_RECT.width - self.rect.width
         self.rect.x = random.randint(0, max_x)
 
     def update(self):
-
-        # 1. 调用父类方法，保持垂直方向的飞行
+        # 1. 调用父类方法，让敌机在垂直方向运动
         super().update()
 
-        # 2. 判断是否飞出屏幕，如果是，需要从精灵组删除敌机
+        # 2. 判断是否飞出屏幕，如果是，需要将敌机从精灵组删除
         if self.rect.y >= SCREEN_RECT.height:
-            # print("飞出屏幕，需要从精灵组删除...")
-            # kill方法可以将精灵从所有精灵组中移出，精灵就会被自动销毁
             self.kill()
-
-    def __del__(self):
-        # print("敌机挂了 %s" % self.rect)
-        pass
-
+            print("敌机飞出屏幕...")
 
 class Hero(GameSprite):
     """英雄精灵"""
 
     def __init__(self):
 
-        # 1. 调用父类方法，设置image&speed
         super().__init__("./images/me1.png", 0)
 
-        # 2. 设置英雄的初始位置
+        # 设置初始位置
         self.rect.centerx = SCREEN_RECT.centerx
         self.rect.bottom = SCREEN_RECT.bottom - 120
-
-        # 3. 创建子弹的精灵组
+        # 创建子弹的精灵组
         self.bullets = pygame.sprite.Group()
 
     def update(self):
-
-        # 英雄在水平方向移动
+        # 飞机水平移动
         self.rect.x += self.speed
 
-        # 控制英雄不能离开屏幕
-        if self.rect.x < 0:
-            self.rect.x = 0
-        elif self.rect.right > SCREEN_RECT.right:
+        # 判断屏幕边界
+        if self.rect.left < 0:
+            self.rect.left = 0
+        if self.rect.right > SCREEN_RECT.right:
             self.rect.right = SCREEN_RECT.right
 
     def fire(self):
-        print("发射子弹...")
-
-        for i in (0, 1, 2):
+        for i in (1, 2, 3):
             # 1. 创建子弹精灵
             bullet = Bullet()
 
@@ -126,24 +110,17 @@ class Hero(GameSprite):
 
             # 3. 将精灵添加到精灵组
             self.bullets.add(bullet)
-
+        print("发射子弹...")
 
 class Bullet(GameSprite):
     """子弹精灵"""
 
     def __init__(self):
-
-        # 调用父类方法，设置子弹图片，设置初始速度
         super().__init__("./images/bullet1.png", -2)
 
     def update(self):
-
-        # 调用父类方法，让子弹沿垂直方向飞行
         super().update()
 
-        # 判断子弹是否飞出屏幕
+        # 判断是否超出屏幕，如果是，从精灵组删除
         if self.rect.bottom < 0:
             self.kill()
-
-    def __del__(self):
-        print("子弹被销毁...")

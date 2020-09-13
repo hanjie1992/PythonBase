@@ -1,5 +1,5 @@
 # 定义布尔型变量 has_ticket 表示是否有车票
-has_ticket = True
+has_ticket = False
 
 # 定义整型变量 knife_length 表示刀的长度，单位：厘米
 knife_length = 10
